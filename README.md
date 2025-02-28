@@ -2,6 +2,22 @@
 
 A simple server system for managing users with validation for Israeli IDs and phone numbers.
 
+## Development Principles
+
+This project implements several important software development principles:
+
+1. **Modular Architecture** - The codebase is organized using an MVC-like pattern, separating data models, controllers, and validators into distinct modules.
+
+2. **Single Responsibility Principle** - Each component has a clear, well-defined responsibility (e.g., User model manages user data, userValidator handles validation logic).
+
+3. **RESTful API Design** - The API follows REST conventions with appropriate HTTP methods (GET for retrieving data, POST for creating resources).
+
+4. **Data Validation** - The system implements thorough validation for critical data like Israeli ID numbers and phone numbers.
+
+5. **Error Handling** - Proper error responses with appropriate HTTP status codes and informative messages.
+
+6. **Automated Testing** - Comprehensive tests that verify both successful operations and proper handling of invalid inputs.
+
 ## Features
 
 - Load users from a JSON file
