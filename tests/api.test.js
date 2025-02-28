@@ -4,15 +4,12 @@ const userController = require('../src/controllers/userController');
 const path = require('path');
 const fs = require('fs');
 
-// Before all tests, load users from the test file
 beforeAll(() => {
-  // Load test users
   const testDataPath = path.join(__dirname, '..', 'src', 'data', 'users.json');
   userController.loadUsers(testDataPath);
 });
 
 describe('API Tests', () => {
-  // Test getting all usernames
   test('GET /users should return all usernames', async () => {
     const response = await request(app).get('/users');
     expect(response.statusCode).toBe(200);
@@ -20,9 +17,7 @@ describe('API Tests', () => {
     expect(response.body.length).toBeGreaterThan(0);
   });
 
-  // Test getting a user by name
   test('GET /users/:name should return a user', async () => {
-    // Get a username from the list
     const usersResponse = await request(app).get('/users');
     const firstUsername = usersResponse.body[0];
     
@@ -31,7 +26,6 @@ describe('API Tests', () => {
     expect(response.body.name).toBe(firstUsername);
   });
 
-  // Test creating a new user
   test('POST /users should create a new user', async () => {
     const newUser = {
       id: "304687148",
@@ -50,7 +44,6 @@ describe('API Tests', () => {
     expect(response.body.name).toBe(newUser.name);
   });
 
-  // Test creating a user with invalid ID
   test('POST /users should reject user with invalid ID', async () => {
     const invalidUser = {
       id: "123456789",
