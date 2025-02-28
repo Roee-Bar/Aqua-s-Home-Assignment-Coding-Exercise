@@ -39,8 +39,8 @@ Aqua HWA/
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/Roee-Bar/Aqua-s-Home-Assignment-Coding-Exercise.git
+cd Aqua-s-Home-Assignment-Coding-Exercise
 
 # Install dependencies
 npm install
@@ -88,8 +88,8 @@ node -v
 npm -v
 
 # Clone repository and install dependencies
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/Roee-Bar/Aqua-s-Home-Assignment-Coding-Exercise.git
+cd Aqua-s-Home-Assignment-Coding-Exercise
 npm install
 
 # Run the server
@@ -106,8 +106,8 @@ node -v
 npm -v
 
 # Clone repository and install dependencies
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/Roee-Bar/Aqua-s-Home-Assignment-Coding-Exercise.git
+cd Aqua-s-Home-Assignment-Coding-Exercise
 npm install
 
 # Run the server
