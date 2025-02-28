@@ -1,0 +1,20 @@
+[
+  {
+    "id": "123456782",
+    "name": "Israel Israeli",
+    "phone": "0501234567",
+    "address": "1 Herzl Street, Tel Aviv"
+  },
+  {
+    "id": "987654321",
+    "name": "Michal Cohen",
+    "phone": "0521234567",
+    "address": "10 Begin Road, Jerusalem"
+  },
+  {
+    "id": "111222333",
+    "name": "David Levy",
+    "phone": "0501111111",
+    "address": "5 Rothschild Boulevard, Tel Aviv"
+  }
+]
