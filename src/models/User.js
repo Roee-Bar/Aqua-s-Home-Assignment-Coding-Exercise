@@ -8,18 +8,12 @@ class User {
     this.address = address;
   }
 
-  /**
-   * Checks if the user is valid
-   * @returns {boolean} - Whether the user is valid
-   */
+
   isValid() {
     return isValidIsraeliID(this.id) && isValidIsraeliPhone(this.phone);
   }
 
-  /**
-   * Converts user object to JSON format
-   * @returns {Object} - JSON object
-   */
+
   toJSON() {
     return {
       id: this.id,
@@ -29,11 +23,7 @@ class User {
     };
   }
 
-  /**
-   * Creates a User object from JSON data
-   * @param {Object} data - User data in JSON
-   * @returns {User} - New User object
-   */
+
   static fromJSON(data) {
     return new User(data.id, data.name, data.phone, data.address);
   }
