@@ -31,6 +31,31 @@ This project implements several important software development principles:
 
 6. **Automated Testing** - Comprehensive tests that verify both successful operations and proper handling of invalid inputs.
 
+## Technologies Used
+
+This project leverages several modern technologies and libraries:
+
+### Core Technologies
+- **Node.js** - JavaScript runtime environment for server-side code execution
+- **Express.js** - Web framework for building the RESTful API with middleware support
+- **JavaScript (ES6+)** - Modern JavaScript features for cleaner, more maintainable code
+
+### Data Management
+- **Map Object** - In-memory data structure for efficient O(1) user lookups by ID
+- **JSON** - Data format for both storage (users.json) and API communication
+- **fs Module** - Node.js built-in module for file system operations
+
+### Validation & Testing
+- **RegExp** - Regular expressions for Israeli ID and phone number validation
+- **Jest** - Testing framework for unit and integration tests
+- **Supertest** - HTTP testing library for API endpoint testing
+
+### Development Tools
+- **npm** - Package manager for dependency management and script execution
+- **Nodemon** - Development utility that monitors for changes and restarts the server
+
+These technologies were chosen to create a modular, maintainable, and efficient system for managing user data with proper validation for Israeli-specific formats.
+
 ## Data Flow
 
 ### Application Startup
