@@ -68,12 +68,10 @@ function getUserByName(req, res) {
 function createUser(req, res) {
   const userData = req.body;
   
-  // Check for required fields
   if (!userData.id || !userData.name || !userData.phone || !userData.address) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
   
-  // Check field types
   if (typeof userData.id !== 'string' || typeof userData.name !== 'string' || 
       typeof userData.phone !== 'string' || typeof userData.address !== 'string') {
     return res.status(400).json({ error: 'Invalid field types' });
@@ -85,6 +83,11 @@ function createUser(req, res) {
   
   if (!isValidIsraeliPhone(userData.phone)) {
     return res.status(400).json({ error: 'Invalid phone number' });
+  }
+
+  const existingUserWithSameName = Array.from(users.values()).find(u => u.name === userData.name);
+  if (existingUserWithSameName) {
+    return res.status(409).json({ error: 'User with this name already exists' });
   }
   
   const user = User.fromJSON(userData);
