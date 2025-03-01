@@ -98,6 +98,8 @@ The user loading process:
 4. If validation fails, returns a 400 error with an appropriate message
 5. If validation succeeds, creates a new User object and adds it to the Map
 6. Returns the created user with 201 status code
+7. If a user with the same ID already exists, returns a 409 conflict error
+8. If a user with the same name already exists, returns a 409 conflict error
 
 ## Validation Logic
 
@@ -110,8 +112,12 @@ The user loading process:
    - The sum must be divisible by 10
 
 ### Israeli Phone Validation
-1. Validates phone numbers match Israeli formats (05X-XXXXXXX, 05X XXXXXXX, 05XXXXXXXX)
-2. Uses a regular expression to check the pattern
+1. Validates phone numbers match Israeli formats:
+   - Standard format: 05X-XXXXXXX or 05XXXXXXXX (10 digits starting with 05)
+   - International format with leading 972: 
+     - 972-5X-XXXXXXX (12 digits, with 0 after country code)
+     - 9725XXXXXXXX (11 digits, without 0 after country code)
+2. Uses string manipulation and conditional logic to check these patterns
 
 ## Features
 
@@ -119,26 +125,28 @@ The user loading process:
 - Store users in a map (key=ID, value=user object)
 - Retrieve user information using REST API endpoints
 - Create new users with validation
+- Prevent duplicate users (by ID or name)
+- Comprehensive validation for Israeli IDs and phone numbers
+- Detailed error reporting for invalid data
 
 ## Project Structure
 
 ```
-Aqua HWA/
 ├── src/
-│   ├── index.js          # Main entry point
-│   ├── server.js         # Express server setup
-│   ├── controllers/      # Request handlers
+│   ├── index.js                 # Main entry point
+│   ├── server.js                # Express server setup
+│   ├── controllers/             # Request handlers
 │   │   └── userController.js
-│   ├── models/           # Data models
+│   ├── models/                  # Data models
 │   │   └── User.js
-│   ├── validators/       # Input validation
+│   ├── validators/              # Input validation
 │   │   └── userValidator.js
 │   └── data/
-│       └── users.json    # Sample data
-├── tests/                # Test files
+│       └── users.json           # Sample data
+├── tests/                       # Test files
 │   └── api.test.js
 ├── package.json
-└── README.md             # Documentation and setup instructions
+└── README.md                    # Documentation
 ```
 
 ## Key Components
@@ -146,70 +154,53 @@ Aqua HWA/
 ### User Model (`models/User.js`)
 - Represents a user entity with ID, name, phone, and address
 - Provides methods for validation and conversion to/from JSON
-- Encapsulates the user object's structure and behavior
-- Implements the `isValid()` method that uses the validators
-- Contains static method `fromJSON()` to create User instances from plain objects
+- Uses validator functions to check ID and phone number validity
 
 ### User Validator (`validators/userValidator.js`)
 - Contains functions to validate Israeli IDs and phone numbers
-- Implements specific validation algorithms for Israeli standards
-- The `isValidIsraeliID()` function applies the Luhn algorithm with Israeli-specific modifications
-- The `isValidIsraeliPhone()` function validates against common Israeli mobile number formats
+- Implements the Luhn algorithm for Israeli ID validation
+- Validates multiple formats of Israeli phone numbers
 
 ### User Controller (`controllers/userController.js`)
 - Manages user data and handles API requests
-- Implements CRUD operations (currently Create and Read)
-- Maintains the users Map as an in-memory database
-- Handles loading users from the JSON file and filtering out invalid entries
-- Implements the API endpoint logic with proper error handling
-- Returns appropriate HTTP status codes based on operation outcomes
+- Implements user loading from JSON files
+- Provides endpoints for listing users, retrieving specific users, and creating new users
+- Includes validation and error handling for all operations
+- Prevents duplicate users (by ID or name)
 
 ### Server (`server.js`)
 - Sets up Express middleware and routes
 - Configures API endpoints and maps them to controller functions
 - Initializes the user data loading on startup
-- Sets up JSON body parsing middleware for handling request payloads
-- Exports the configured Express app for use by the main entry point and tests
 
 ## Technical Implementation Details
 
-1. **In-Memory Storage**: Users are stored in a Map for O(1) lookup by ID, providing efficient retrieval of user data.
+1. **In-Memory Storage**: Users are stored in a Map for O(1) lookup by ID.
 
 2. **Error Handling**: Each validation step returns appropriate HTTP status codes and error messages:
    - 200: Successful operation
    - 201: Resource successfully created 
    - 400: Bad request (validation failures)
    - 404: Resource not found
+   - 409: Conflict (duplicate resources)
 
-3. **Separation of Concerns**: Clear separation between models, controllers, and validators ensures maintainable code:
-   - Models handle data structure and business logic
-   - Controllers handle HTTP operations and routing
-   - Validators handle input validation rules
-
-4. **RESTful Design**: API follows REST principles with appropriate HTTP methods and status codes:
-   - GET for retrieving resources
-   - POST for creating resources
-   - Consistent response formats
-   - Predictable URL patterns
-
-5. **Middleware Usage**: Express middleware for JSON parsing simplifies request handling.
-
-6. **Stateless Operation**: The server maintains no client session state between requests.
-
-7. **Input Validation**: Comprehensive validation ensures data integrity:
+3. **Input Validation**: Comprehensive validation ensures data integrity:
    - Israeli ID validation using the check-digit algorithm
-   - Phone number format validation using regular expressions
+   - Phone number format validation for multiple Israeli formats
+   - Type checking for all user fields
+
+4. **Duplicate Prevention**: The system prevents the creation of duplicate users:
+   - Checks for existing users with the same ID
+   - Checks for existing users with the same name
 
 ## Testing Architecture
 
 The project includes comprehensive API tests using Jest and Supertest:
 
-1. Tests load a set of test users
-2. Tests verify each API endpoint:
-   - GET /users returns all usernames
-   - GET /users/:name returns the correct user
-   - POST /users successfully creates valid users
-   - POST /users rejects invalid user data
+1. Tests verify that the API correctly loads test users
+2. Tests the GET endpoints for listing all users and retrieving specific users
+3. Tests the POST endpoint for creating new users
+4. Tests validation by attempting to create users with invalid data
 
 ## System Requirements
 
@@ -241,9 +232,54 @@ The server will run at: http://localhost:3000
 
 ## API Endpoints
 
-- `GET /users` - Get all usernames
-- `GET /users/:name` - Get user information by name
-- `POST /users` - Create a new user
+### GET /users
+Returns a list of all usernames.
+
+Example response:
+```json
+["Israel Israeli", "Michal Cohen", "David Levy"]
+```
+
+### GET /users/:name
+Returns detailed information about a specific user.
+
+Example request:
+```
+GET /users/Israel%20Israeli
+```
+
+Example response:
+```json
+{
+  "id": "123456782",
+  "name": "Israel Israeli",
+  "phone": "0501234567",
+  "address": "1 Herzl Street, Tel Aviv"
+}
+```
+
+### POST /users
+Creates a new user.
+
+Example request:
+```json
+{
+  "id": "304687148",
+  "name": "Jacob Cohen",
+  "phone": "0541234567",
+  "address": "100 Jaffa Street, Jerusalem"
+}
+```
+
+Example response (201 Created):
+```json
+{
+  "id": "304687148",
+  "name": "Jacob Cohen",
+  "phone": "0541234567",
+  "address": "100 Jaffa Street, Jerusalem"
+}
+```
 
 ## Running Tests
 
@@ -271,24 +307,6 @@ npm install
 npm start
 ```
 
-## Setup Instructions for Windows
-
-```powershell
-# Install Node.js and npm from https://nodejs.org/
-
-# Verify installation
-node -v
-npm -v
-
-# Clone repository and install dependencies
-git clone https://github.com/Roee-Bar/Aqua-s-Home-Assignment-Coding-Exercise.git
-cd Aqua-s-Home-Assignment-Coding-Exercise
-npm install
-
-# Run the server
-npm start
-```
-
 ## Potential Enhancements
 
 Future improvements could include:
@@ -298,3 +316,6 @@ Future improvements could include:
 3. Adding authentication and authorization
 4. Implementing pagination for large datasets
 5. Adding more comprehensive error handling and logging
+6. Adding more validation rules for other fields (e.g., address format)
+7. Implementing rate limiting to prevent abuse
+8. Adding support for other ID/phone formats for international users
