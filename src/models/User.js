@@ -2,6 +2,7 @@ const { isValidIsraeliID, isValidIsraeliPhone } = require('../validators/userVal
 
 class User {
   constructor(id, name, phone, address) {
+    // 
     this.id = id;
     this.name = name;
     this.phone = phone;

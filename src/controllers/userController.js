@@ -7,23 +7,45 @@ const users = new Map();
 
 function loadUsers(filePath) {
   try {
+    if (!fs.existsSync(filePath)) {
+      console.error(`Error: File not found at path ${filePath}`);
+      return users;
+    }
+
     const data = fs.readFileSync(filePath, 'utf8');
-    const usersArray = JSON.parse(data);
     
-    usersArray.forEach(userData => {
-      const user = User.fromJSON(userData);
-      if (user.isValid()) {
-        users.set(user.id, user);
-      } else {
-        console.log(`Invalid user: ${user.name}`);
-      }
-    });
-    
-    console.log(`Loaded ${users.size} valid users`);
-    return users;
+    try {
+      const usersArray = JSON.parse(data);
+      
+      usersArray.forEach(userData => {
+        if (!userData.id || !userData.name || !userData.phone || !userData.address) {
+          console.log(`Skipping user with missing required fields: ${JSON.stringify(userData)}`);
+          return;
+        }
+
+        if (typeof userData.id !== 'string' || typeof userData.name !== 'string' || 
+            typeof userData.phone !== 'string' || typeof userData.address !== 'string') {
+          console.log(`Skipping user with invalid field types: ${JSON.stringify(userData)}`);
+          return;
+        }
+
+        const user = User.fromJSON(userData);
+        if (user.isValid()) {
+          users.set(user.id, user);
+        } else {
+          console.log(`Invalid user: ${user.name} - Failed validation checks`);
+        }
+      });
+      
+      console.log(`Loaded ${users.size} valid users`);
+      return users;
+    } catch (parseError) {
+      console.error('Error parsing JSON data:', parseError);
+      return users;
+    }
   } catch (err) {
     console.error('Error loading users:', err);
-    throw err;
+    return users;
   }
 }
 
@@ -45,6 +67,17 @@ function getUserByName(req, res) {
 
 function createUser(req, res) {
   const userData = req.body;
+  
+  // Check for required fields
+  if (!userData.id || !userData.name || !userData.phone || !userData.address) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+  
+  // Check field types
+  if (typeof userData.id !== 'string' || typeof userData.name !== 'string' || 
+      typeof userData.phone !== 'string' || typeof userData.address !== 'string') {
+    return res.status(400).json({ error: 'Invalid field types' });
+  }
   
   if (!isValidIsraeliID(userData.id)) {
     return res.status(400).json({ error: 'Invalid Israeli ID' });
