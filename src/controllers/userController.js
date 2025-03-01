@@ -85,6 +85,10 @@ function createUser(req, res) {
     return res.status(400).json({ error: 'Invalid phone number' });
   }
 
+  if (users.has(userData.id)) {
+    return res.status(409).json({ error: 'User with this ID already exists' });
+  }
+
   const existingUserWithSameName = Array.from(users.values()).find(u => u.name === userData.name);
   if (existingUserWithSameName) {
     return res.status(409).json({ error: 'User with this name already exists' });
