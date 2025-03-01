@@ -16,5 +16,64 @@
     "name": "David Levy",
     "phone": "0501111111",
     "address": "5 Rothschild Boulevard, Tel Aviv"
+  },
+  {
+    "id": "304687148",
+    "name": "Jacob Cohen",
+    "phone": "0541234567",
+    "address": "100 Jaffa Street, Jerusalem"
+  },
+  {
+    "id": "123456789",
+    "name": "Invalid ID User",
+    "phone": "0529876543",
+    "address": "15 Dizengoff Street, Tel Aviv"
+  },
+  {
+    "id": "037562719",
+    "name": "Yael Goldberg",
+    "phone": "9725412345",
+    "address": "22 Ben Yehuda Street, Jerusalem"
+  },
+  {
+    "id": "012345672",
+    "name": "Sarah Levi",
+    "phone": "972501234567",
+    "address": "30 Haifa Street, Haifa"
+  },
+  {
+    "id": "307851634",
+    "name": "Daniel Ben-David",
+    "phone": "050-7654321",
+    "address": "7 Weizmann Street, Rehovot"
+  },
+  {
+    "id": "023456783",
+    "name": "Noa Mizrahi",
+    "phone": "052 987 6543",
+    "address": "45 Einstein Street, Beer Sheva"
+  },
+  {
+    "id": "",
+    "name": "Missing ID User",
+    "phone": "0501234567",
+    "address": "60 Allenby Street, Tel Aviv"
+  },
+  {
+    "id": "036735218",
+    "name": "Ron Cohen",
+    "phone": "",
+    "address": "8 Sderot Yerushalayim, Ashdod"
+  },
+  {
+    "id": "036735219",
+    "name": "Maya Rosenberg",
+    "address": "12 Ben Gurion Avenue, Netanya"
+  },
+  {
+    "id": 305764219,
+    "name": "Numeric ID User",
+    "phone": "0501234567",
+    "address": "50 HaNeviim Street, Jerusalem"
   }
 ]
