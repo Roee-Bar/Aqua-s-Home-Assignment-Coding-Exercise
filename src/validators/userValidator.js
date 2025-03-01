@@ -18,17 +18,17 @@ function isValidIsraeliPhone(phone) {
   
   const digitsOnly = phone.replace(/\D/g, '');
   
-  if (digitsOnly.startsWith('972')) {
-    if (digitsOnly.length === 12 && digitsOnly.charAt(3) === '0') {
-      return digitsOnly.charAt(3) === '0' && digitsOnly.charAt(4) === '5';
-    } else if (digitsOnly.length === 11) {
-      return digitsOnly.charAt(3) === '5';
-    }
-    return false;
-  }
-  
   if (digitsOnly.length === 10 && digitsOnly.startsWith('05')) {
     return true;
+  }
+
+  if (digitsOnly.startsWith('972')) {
+    if (digitsOnly.length === 12 && digitsOnly.charAt(3) === '0' && digitsOnly.charAt(4) === '5') {
+      return true;
+    } 
+    if (digitsOnly.length === 11 && digitsOnly.charAt(3) === '5') {
+      return true;
+    }
   }
   
   return false;

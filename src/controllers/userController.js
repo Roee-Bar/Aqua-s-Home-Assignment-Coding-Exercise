@@ -5,6 +5,7 @@ const { isValidIsraeliID, isValidIsraeliPhone } = require('../validators/userVal
 
 const users = new Map();
 
+// Loads users from JSON file, Validates each user and adds valid users to Map.
 function loadUsers(filePath) {
   try {
     if (!fs.existsSync(filePath)) {
@@ -65,6 +66,7 @@ function getUserByName(req, res) {
   }
 }
 
+// Creates new user & Validates Israeli ID and phone number.
 function createUser(req, res) {
   const userData = req.body;
   
