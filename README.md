@@ -38,8 +38,8 @@ A simple REST API server for managing users with validation for Israeli IDs and 
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/user-management-system.git
-cd user-management-system
+git clone https://github.com/Roee-Bar/Aqua-s-Home-Assignment-Coding-Exercise.git
+cd Aqua-s-Home-Assignment-Coding-Exercise
 
 # Install dependencies
 npm install
