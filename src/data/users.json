@@ -18,12 +18,6 @@
     "address": "5 Rothschild Boulevard, Tel Aviv"
   },
   {
-    "id": "304687148",
-    "name": "Jacob Cohen",
-    "phone": "0541234567",
-    "address": "100 Jaffa Street, Jerusalem"
-  },
-  {
     "id": "123456789",
     "name": "Invalid ID User",
     "phone": "0529876543",
